@@ -1,3 +1,58 @@
+#generate random dataset
+set.seed(12)
+data1 <- data.frame(reference_key=round(runif(5000, min=1, max=4500)),
+                   dm_sas=rbinom(5000, 1, 0.1),
+                   child_adhd=rbinom(5000, 1, 0.1),
+                   time=round(runif(5000, min=1, max=7305)),
+                   m_age1=round(runif(5000, min=4825, max=21223)),
+                   ses=sample(c("LOW","HIGH","MIDIUMLOW","MIDIUMHIGH"), 5000, replace=TRUE),
+                   y=sample(2001:2014, 5000, replace=TRUE),
+                   antihypertensive=rbinom(5000, 1, 0.01),
+                   antipsychotics=rbinom(5000, 1, 0.01),
+                   sedatives=rbinom(5000, 1, 0.01),
+                   antidepressants=rbinom(5000, 1, 0.01),
+                   antiepileptics=rbinom(5000, 1, 0.01),
+                   antiparkinson=rbinom(5000, 1, 0.01),
+                   stimulants=rbinom(5000, 1, 0.01),
+                   opioids=rbinom(5000, 1, 0.01),
+                   triptan=rbinom(5000, 1, 0.005),
+                   teratogenic=rbinom(5000, 1, 0.01),
+                   pcos=rbinom(5000, 1, 0.005),
+                   anxiety=rbinom(5000, 1, 0.01),
+                   depression=rbinom(5000, 1, 0.01),
+                   epilepsy=rbinom(5000, 1, 0.01),
+                   migraine=rbinom(5000, 1, 0.01),
+                   hypertension=rbinom(5000, 1, 0.01),
+                   renal=rbinom(5000, 1, 0.01),
+                   crohn=rbinom(5000, 1, 0.01),
+                   sleep=rbinom(5000, 1, 0.01),
+                   scz=rbinom(5000, 1, 0.01),
+                   bp=rbinom(5000, 1, 0.01),
+                   personality=rbinom(5000, 1, 0.005),
+                   intellectual=rbinom(5000, 1, 0.01),
+                   development=rbinom(5000, 1, 0.01),
+                   illicit=rbinom(5000, 1, 0.01),
+                   adhd_asd=rbinom(5000, 1, 0.001),
+                   thyroid=rbinom(5000, 1, 0.01),
+                   Rheumatoid=rbinom(5000, 1, 0.01),
+                   headache=rbinom(5000, 1, 0.01),
+                   smoke=rbinom(5000, 1, 0.01),
+                   drink=rbinom(5000, 1, 0.01),
+                   sex=sample(c("F","M"), 5000, replace=TRUE),
+                   preterm=rbinom(5000, 1, 0.01),
+                   multi_pre=sample(c("N","Y"), 5000, replace=TRUE),
+                   parity=sample(c(">= 5","0","1","2","3","4"), 5000, replace=TRUE),
+                   insti=sample(c("AHN","KWH","PMH","PYN","QMH","UCH"), 5000, replace=TRUE),
+                   b_id_new=rbinom(5000, 1, 0.01),
+                   nor=rbinom(5000, 1, 0.999)) %>% 
+  mutate(bmi_fac=ifelse(nor==0,sample(c("obe","over","under"),length(nor),replace = T),0),
+         obe=ifelse(bmi_fac=="obe",1,0),
+         over=ifelse(bmi_fac=="over",1,0),
+         under=ifelse(bmi_fac=="under",1,0))
+write.csv(data1,"D:/OneDrive - connect.hku.hk/Other-share/5.Phd project/10.mother-child linkage/Github DIAMOND-A/DIAMOND-A/R codes/data1.csv")
+
+
+
 library(rlang)
 library(WeightIt)
 library(haven)
@@ -12,7 +67,7 @@ library(survminer)
 
 #1.step 1 Calculate the propensity score for t-PA dm_sas for the study population using logistic regression
 #read the cleaned databse
-data1 <- read.csv("D:/data_no_share_20200506/6.DIAMOND/mc_01to15_sas_2014.csv")
+data1 <- read.csv("D:/OneDrive - connect.hku.hk/Other-share/5.Phd project/10.mother-child linkage/Github DIAMOND-A/DIAMOND-A/R codes/data1.csv")
 
 ### calculate the person year, number of total population and number of evenets
 data_count <- data1 %>% 
@@ -83,7 +138,7 @@ test_stra <- test_trim %>%
   arrange(pscore) %>% 
   mutate(rank_raw=1:length(b_id_new)) %>% 
   mutate(strata=floor(rank_raw*50/(nrow(test_trim)+1))+1)
-  
+
 
 
 
@@ -209,7 +264,7 @@ unloadNamespace("tableone")
 library(survey)
 
 trim_weight <- svydesign(ids = ~ b_id_new, strata = ~ dm_sas, weights = ~ w,
-                       data = test_trim1)
+                         data = test_trim1,nest=TRUE)
 library(tableone)
 tab1 <- svyCreateTableOne(vars = varsp,
                           strata = "dm_sas", data = trim_weight,
@@ -250,7 +305,7 @@ summary(res.cox1) #(keep three decimals pls, it will be easier for us to meta an
 km_sz<-survfit(Surv(time, child_adhd) ~ dm_sas, 
                weights = w,data=cox_data)
 
-ggsurvplot(km_sz,
+a <- ggsurvplot(km_sz,
            fun = "event")
 #could you please save the data after trimming, with columns of time, child_adhd, dm_sas, and weight for us to generate the cumulative plot
 #for MDM vs Non-MDMD, GDM vs Non-MDMD and PGDM vs Non-MDM only of the main analysis
@@ -300,3 +355,4 @@ res.cox1 <- coxph(Surv(time, child_adhd) ~ dm_sas,
 summary(survfit(res.cox1,newdata = data.frame(dm_sas=1)), times = seq(6,18,2)*360)
 #exposure==0
 summary(survfit(res.cox1,newdata = data.frame(dm_sas=0)), times = seq(6,18,2)*360)
+
