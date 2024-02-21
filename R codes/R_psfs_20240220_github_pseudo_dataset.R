@@ -63,6 +63,8 @@ library(smd)
 library(ggplot2)
 library(survival)
 library(survminer)
+library(EValue)
+
 
 
 #1.step 1 Calculate the propensity score for t-PA mdm for the study population using logistic regression
@@ -357,3 +359,8 @@ summary(survfit(res.cox1,newdata = data.frame(mdm=1)), times = seq(6,18,2)*360)
 #exposure==0
 summary(survfit(res.cox1,newdata = data.frame(mdm=0)), times = seq(6,18,2)*360)
 
+
+
+
+#calculate e value
+evalues.RR(est = 1.16, lo = 1.08, hi = 1.24)
