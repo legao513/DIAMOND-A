@@ -1,6 +1,7 @@
 #generate random dataset
 set.seed(12)
-data1 <- data.frame(mother_id=round(runif(5000, min=1, max=4500)),
+data1 <- data.frame(baby_id=1:5000,
+                    mother_id=round(runif(5000, min=1, max=4500)),
                    mdm=rbinom(5000, 1, 0.1),
                    child_adhd=rbinom(5000, 1, 0.1),
                    followup_time=round(runif(5000, min=1, max=7305)),
@@ -43,7 +44,6 @@ data1 <- data.frame(mother_id=round(runif(5000, min=1, max=4500)),
                    multi_pregnancy=sample(c("N","Y"), 5000, replace=TRUE),
                    parity=sample(c(">= 5","0","1","2","3","4"), 5000, replace=TRUE),
                    birth_institution=sample(c("AHN","KWH","PMH","PYN","QMH","UCH"), 5000, replace=TRUE),
-                   baby_id=rbinom(5000, 1, 0.01),
                    normal_bmi=rbinom(5000, 1, 0.999)) %>% 
   mutate(bmi_fac=ifelse(normal_bmi==0,sample(c("obe","over","under"),length(normal_bmi),replace = T),0),
          obesity=ifelse(bmi_fac=="obe",1,0),
