@@ -312,7 +312,7 @@ summary(res.cox1) #(keep three decimals pls, it will be easier for us to meta an
 
 # for the sibling analysis, change the variable 'mdm' to 'gdm', and add a cluster of mother_id in the cox regression
 res.cox1 <- coxph(Surv(followup_time, child_adhd) ~ gdm, 
-                  weights=w,cluster= mother_id, data =  cox_data)
+                  weights=w,strata= mother_id, data =  cox_data)
 summary(res.cox1) #(keep three decimals pls, it will be easier for us to meta analyse)
 
 
