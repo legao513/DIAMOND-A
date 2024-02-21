@@ -48,7 +48,12 @@ data1 <- data.frame(baby_id=1:5000,
   mutate(bmi_fac=ifelse(normal_bmi==0,sample(c("obe","over","under"),length(normal_bmi),replace = T),0),
          obesity=ifelse(bmi_fac=="obe",1,0),
          overweight=ifelse(bmi_fac=="over",1,0),
-         underweight=ifelse(bmi_fac=="under",1,0))
+         underweight=ifelse(bmi_fac=="under",1,0),
+         gdm=ifelse(mdm==1,rbinom(523, 1, 0.93),0),
+         pgdm=ifelse(mdm==1&gdm==0,1,0),
+         t1dm=ifelse(pgdm==1,rbinom(39, 1, 0.45),0),
+         t2dm=ifelse(pgdm==1& t1dm==0,1,0))
+
 write.csv(data1,"D:/OneDrive - connect.hku.hk/Other-share/5.Phd project/10.mother-child linkage/Github DIAMOND-A/DIAMOND-A/R codes/data1.csv")
 
 
@@ -68,6 +73,8 @@ library(EValue)
 
 
 #1.step 1 Calculate the propensity score for t-PA mdm for the study population using logistic regression
+## This is the analysis for mdm vs non-mdm, for the analysis of gdm, pgdm, t1dm and t2dm, please change the variable 'mdm' to 'gdm', 'pgdm', 't1dm' and 't2dm' respectively
+## For the sibling analysis, please change the variable 'mdm' to 'gdm', and add a strata function in the cox regression model
 #read the cleaned databse
 data1 <- read.csv("D:/OneDrive - connect.hku.hk/Other-share/5.Phd project/10.mother-child linkage/Github DIAMOND-A/DIAMOND-A/R codes/data1.csv")
 
@@ -302,6 +309,12 @@ cox_data <- merge(test_stra,w_all,by=c("strata","mdm")) %>%
 res.cox1 <- coxph(Surv(followup_time, child_adhd) ~ mdm, 
                   weights=w,data =  cox_data)
 summary(res.cox1) #(keep three decimals pls, it will be easier for us to meta analyse)
+
+# for the sibling analysis, change the variable 'mdm' to 'gdm', and add a cluster of mother_id in the cox regression
+res.cox1 <- coxph(Surv(followup_time, child_adhd) ~ gdm, 
+                  weights=w,cluster= mother_id, data =  cox_data)
+summary(res.cox1) #(keep three decimals pls, it will be easier for us to meta analyse)
+
 
 
 
