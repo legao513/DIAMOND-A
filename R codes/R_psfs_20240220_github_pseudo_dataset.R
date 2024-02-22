@@ -38,13 +38,13 @@
 #                    rheumatoid_arthristis=rbinom(20000, 1, 0.01),
 #                    headache=rbinom(20000, 1, 0.01),
 #                    smoke=rbinom(20000, 1, 0.01),
-#                    drink=rbinom(20000, 1, 0.01),
+#                    alcohol=rbinom(20000, 1, 0.01),
 #                    baby_sex=sample(c("F","M"), 20000, replace=TRUE),
 #                    preterm_birth=rbinom(20000, 1, 0.01),
 #                    multi_pregnancy=sample(c("N","Y"), 20000, replace=TRUE),
 #                    parity=sample(c(">= 5","0","1","2","3","4"), 20000, replace=TRUE),
 #                    birth_institution=sample(c("AHN","KWH","PMH","PYN","QMH","UCH"), 20000, replace=TRUE),
-#                    normal_bmi=rbinom(20000, 1, 0.999)) %>% 
+#                    normal_bmi=rbinom(20000, 1, 0.999)) %>%
 #   mutate(bmi_fac=ifelse(normal_bmi==0,sample(c("obe","over","under"),length(normal_bmi),replace = T),0),
 #          obesity=ifelse(bmi_fac=="obe",1,0),
 #          overweight=ifelse(bmi_fac=="over",1,0),
@@ -98,7 +98,7 @@ ps.fit <- glm(mdm ~ mother_age + as.factor(birth_year)+as.factor(ses)+baby_sex+m
                 anxiety+depression+epilepsy+migraine+hypertension+renal_disease+crohn_disease+
                 sleep_disorder+scz+bipolar+personality_disorder+intellectual_disability+
                 psy_development_disorder+illicit_drug+adhd_asd+thyroid_disorder+rheumatoid_arthristis+
-                headache+smoke+drink+normal_bmi+obesity+overweight+underweight,data = data1_1,family = binomial)
+                headache+smoke+alcohol+normal_bmi+obesity+overweight+underweight,data = data1_1,family = binomial)
 
 data1_1$pscore <- predict(ps.fit, type='response')
 
@@ -220,7 +220,7 @@ varsp <- c("mother_age","y2001","y2002","y2003","y2004","y2005","y2006","y2007",
            "sedatives","antidepressants","antiepileptics","antiparkinson","stimulants",
            "opioids","triptan","teratogenic","pcos","anxiety","depression","epilepsy","migraine",
            "hypertension","renal_disease","crohn_disease","sleep_disorder","scz","bipolar","personality_disorder","intellectual_disability",
-           "psy_development_disorder","illicit_drug","adhd_asd","thyroid_disorder","rheumatoid_arthristis","headache","smoke","drink",
+           "psy_development_disorder","illicit_drug","adhd_asd","thyroid_disorder","rheumatoid_arthristis","headache","smoke","alcohol",
            "normal_bmi","obesity","overweight","underweight")
 catvarsp<- c("y2001","y2002","y2003","y2004","y2005","y2006","y2007","y2008","y2009",
              "y2010","y2011","y2012","y2013","y2014",
@@ -229,7 +229,7 @@ catvarsp<- c("y2001","y2002","y2003","y2004","y2005","y2006","y2007","y2008","y2
              "sedatives","antidepressants","antiepileptics","antiparkinson","stimulants",
              "opioids","triptan","teratogenic","pcos","anxiety","depression","epilepsy","migraine",
              "hypertension","renal_disease","crohn_disease","sleep_disorder","scz","bipolar","personality_disorder","intellectual_disability",
-             "psy_development_disorder","illicit_drug","adhd_asd","thyroid_disorder","rheumatoid_arthristis","headache","smoke","drink",
+             "psy_development_disorder","illicit_drug","adhd_asd","thyroid_disorder","rheumatoid_arthristis","headache","smoke","alcohol",
              "normal_bmi","obesity","overweight","underweight")
 
 basTable<-CreateTableOne( data = data_unweighted,vars = varsp, factorVars = catvarsp, 
