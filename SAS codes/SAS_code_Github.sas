@@ -14,8 +14,8 @@ libname pss "D:\SAS\MDM_ADHD\ps";
 %let class= birth_institution parity multi_pregnancy baby_sex
 birth_year SES antihypertensive antipsychotics sedatives antidepressants antiepileptics
 antiparkinson stimulants opioids teratogenic triptan
-PCOS Smoke drink Anxiety Depression
-Epilepsy Migraine sleep_disorder hypertension renal_disease crohn_disease rheumatoid_arthristis
+PCOS Smoke Alcohol Anxiety Depression Epilepsy Migraine 
+sleep_disorder hypertension renal_disease crohn_disease rheumatoid_arthristis
 scz Bipolar intellectual_disability psy_development_disorder personality_disorder
 thyroid_disorder headache ADHD_ASD
 Overweight Obesity normal_bmi
