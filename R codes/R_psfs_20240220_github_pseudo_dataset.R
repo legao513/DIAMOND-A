@@ -75,7 +75,7 @@ library(EValue)
 #1.step 1 Calculate the propensity score for t-PA mdm for the study population using logistic regression
 ## This is the analysis for mdm vs non-mdm, for the analysis of gdm, pgdm, t1dm and t2dm, please change the variable 'mdm' to 'gdm', 'pgdm', 't1dm' and 't2dm' respectively
 ## For the sibling analysis, please change the variable 'mdm' to 'gdm', and add a strata function in the cox regression model
-#read the cleaned databse
+#read the cleaned database
 data1 <- read.csv("D:/OneDrive - connect.hku.hk/Other-share/5.Phd project/10.mother-child linkage/Github DIAMOND-A/DIAMOND-A/R codes/data1.csv")
 
 ### calculate the person year, number of total population and number of evenets
